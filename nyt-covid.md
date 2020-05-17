@@ -1,7 +1,7 @@
 NYT Covid cases
 ================
 Your name
-2020-05-16
+2020-05-17
 
   - [States](#states)
       - [Glimpse and summary](#glimpse-and-summary)
@@ -54,17 +54,7 @@ file_population <- "data/populations.csv"
 #   )
 counties <-
   url_counties %>% 
-  read_csv(
-    col_types =
-      cols(
-        date = col_date(format = ""),
-        county = col_character(),
-        state = col_character(),
-        fips = col_integer(),
-        cases = col_double(),
-        deaths = col_double()
-      )
-  )
+  read_csv()
 
 # col_types = 
 #   cols(
@@ -76,16 +66,7 @@ counties <-
 #   )
 states <-
   url_states %>% 
-  read_csv(
-    col_types = 
-      cols(
-        date = col_date(format = ""),
-        state = col_character(),
-        fips = col_integer(),
-        cases = col_double(),
-        deaths = col_double()
-      )
-  )
+  read_csv()
 
 # col_types =
 #   cols(
@@ -95,14 +76,7 @@ states <-
 #   )
 population <-
   file_population %>% 
-  read_csv(
-    col_types =
-      cols(
-        region = col_character(),
-        fips = col_integer(),
-        population = col_double()
-      )
-  )
+  read_csv()
 ```
 
 ## States
@@ -159,11 +133,11 @@ states %>%
     ## # A tibble: 5 x 2
     ##   state                        n
     ##   <chr>                    <int>
-    ## 1 District of Columbia        70
-    ## 2 Puerto Rico                 64
-    ## 3 Virgin Islands              63
-    ## 4 Guam                        62
-    ## 5 Northern Mariana Islands    49
+    ## 1 District of Columbia        71
+    ## 2 Puerto Rico                 65
+    ## 3 Virgin Islands              64
+    ## 4 Guam                        63
+    ## 5 Northern Mariana Islands    50
 
 ### Missing values
 
@@ -190,20 +164,20 @@ states %>%
   filter(lead(cases, order_by = date) < cases)
 ```
 
-    ## # A tibble: 2,112 x 5
-    ##    date       state       fips cases deaths
-    ##    <date>     <chr>      <int> <dbl>  <dbl>
-    ##  1 2020-01-26 California     6     2      0
-    ##  2 2020-01-27 California     6     2      0
-    ##  3 2020-01-28 California     6     2      0
-    ##  4 2020-01-29 California     6     2      0
-    ##  5 2020-01-30 Illinois      17     2      0
-    ##  6 2020-01-31 California     6     3      0
-    ##  7 2020-01-31 Illinois      17     2      0
-    ##  8 2020-02-01 California     6     3      0
-    ##  9 2020-02-01 Illinois      17     2      0
-    ## 10 2020-02-02 California     6     6      0
-    ## # … with 2,102 more rows
+    ## # A tibble: 2,147 x 5
+    ##    date       state      fips  cases deaths
+    ##    <date>     <chr>      <chr> <dbl>  <dbl>
+    ##  1 2020-01-26 California 06        2      0
+    ##  2 2020-01-27 California 06        2      0
+    ##  3 2020-01-28 California 06        2      0
+    ##  4 2020-01-29 California 06        2      0
+    ##  5 2020-01-30 Illinois   17        2      0
+    ##  6 2020-01-31 California 06        3      0
+    ##  7 2020-01-31 Illinois   17        2      0
+    ##  8 2020-02-01 California 06        3      0
+    ##  9 2020-02-01 Illinois   17        2      0
+    ## 10 2020-02-02 California 06        6      0
+    ## # … with 2,137 more rows
 
 ``` r
 states %>% 
@@ -213,20 +187,20 @@ states %>%
   filter(lead(deaths, order_by = date) < deaths)
 ```
 
-    ## # A tibble: 1,596 x 5
-    ##    date       state       fips cases deaths
-    ##    <date>     <chr>      <int> <dbl>  <dbl>
-    ##  1 2020-02-29 Washington    53    10      1
-    ##  2 2020-03-01 Washington    53    17      3
-    ##  3 2020-03-02 Washington    53    23      6
-    ##  4 2020-03-03 Washington    53    32     10
-    ##  5 2020-03-04 California     6    55      1
-    ##  6 2020-03-04 Washington    53    47     11
-    ##  7 2020-03-05 California     6    67      1
-    ##  8 2020-03-05 Washington    53    75     11
-    ##  9 2020-03-06 California     6    81      1
-    ## 10 2020-03-06 Florida       12     7      2
-    ## # … with 1,586 more rows
+    ## # A tibble: 1,625 x 5
+    ##    date       state      fips  cases deaths
+    ##    <date>     <chr>      <chr> <dbl>  <dbl>
+    ##  1 2020-02-29 Washington 53       10      1
+    ##  2 2020-03-01 Washington 53       17      3
+    ##  3 2020-03-02 Washington 53       23      6
+    ##  4 2020-03-03 Washington 53       32     10
+    ##  5 2020-03-04 California 06       55      1
+    ##  6 2020-03-04 Washington 53       47     11
+    ##  7 2020-03-05 California 06       67      1
+    ##  8 2020-03-05 Washington 53       75     11
+    ##  9 2020-03-06 California 06       81      1
+    ## 10 2020-03-06 Florida    12        7      2
+    ## # … with 1,615 more rows
 
 ## Counties
 
@@ -236,12 +210,12 @@ states %>%
 glimpse(counties)
 ```
 
-    ## Rows: 147,245
+    ## Rows: 150,169
     ## Columns: 6
     ## $ date   <date> 2020-01-21, 2020-01-22, 2020-01-23, 2020-01-24, 2020-01-24, 2…
     ## $ county <chr> "Snohomish", "Snohomish", "Snohomish", "Cook", "Snohomish", "O…
     ## $ state  <chr> "Washington", "Washington", "Washington", "Illinois", "Washing…
-    ## $ fips   <int> 53061, 53061, 53061, 17031, 53061, 6059, 17031, 53061, 4013, 6…
+    ## $ fips   <chr> "53061", "53061", "53061", "17031", "53061", "06059", "17031",…
     ## $ cases  <dbl> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,…
     ## $ deaths <dbl> 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,…
 
@@ -249,22 +223,20 @@ glimpse(counties)
 summary(counties)
 ```
 
-    ##       date               county             state                fips      
-    ##  Min.   :2020-01-21   Length:147245      Length:147245      Min.   : 1001  
-    ##  1st Qu.:2020-04-06   Class :character   Class :character   1st Qu.:18053  
-    ##  Median :2020-04-20   Mode  :character   Mode  :character   Median :29033  
-    ##  Mean   :2020-04-18                                         Mean   :29957  
-    ##  3rd Qu.:2020-05-03                                         3rd Qu.:45027  
-    ##  Max.   :2020-05-15                                         Max.   :56043  
-    ##                                                             NA's   :1657   
+    ##       date               county             state               fips          
+    ##  Min.   :2020-01-21   Length:150169      Length:150169      Length:150169     
+    ##  1st Qu.:2020-04-06   Class :character   Class :character   Class :character  
+    ##  Median :2020-04-20   Mode  :character   Mode  :character   Mode  :character  
+    ##  Mean   :2020-04-19                                                           
+    ##  3rd Qu.:2020-05-04                                                           
+    ##  Max.   :2020-05-16                                                           
     ##      cases              deaths        
     ##  Min.   :     0.0   Min.   :    0.00  
     ##  1st Qu.:     3.0   1st Qu.:    0.00  
-    ##  Median :    13.0   Median :    0.00  
-    ##  Mean   :   271.4   Mean   :   14.62  
-    ##  3rd Qu.:    61.0   3rd Qu.:    2.00  
-    ##  Max.   :195472.0   Max.   :19972.00  
-    ## 
+    ##  Median :    14.0   Median :    0.00  
+    ##  Mean   :   275.9   Mean   :   14.93  
+    ##  3rd Qu.:    63.0   3rd Qu.:    2.00  
+    ##  Max.   :196481.0   Max.   :20071.00
 
 ### Check counties and states
 
@@ -272,7 +244,7 @@ summary(counties)
 n_distinct(counties$county)
 ```
 
-    ## [1] 1726
+    ## [1] 1727
 
 ``` r
 n_distinct(counties$state)
@@ -323,7 +295,7 @@ counties %>%
     ## # A tibble: 1 x 6
     ##    date county state  fips cases deaths
     ##   <int>  <int> <int> <int> <int>  <int>
-    ## 1     0      0     0  1657     0      0
+    ## 1     0      0     0  1685     0      0
 
 ``` r
 # TODO: investigate further
@@ -355,7 +327,6 @@ us_daily <-
 
 us_daily %>% 
   drop_na(new_cases) %>% 
-  filter(new_cases > 0) %>% # TODO: filter to just March through May
   ggplot(aes(date, new_cases)) +
   geom_col() 
 ```
@@ -387,26 +358,8 @@ states_cumulative %>%
 ### Which state has the most cases per capita?
 
 ``` r
-states_cumulative %>% 
-  left_join(population, by = "fips") # %>% 
-```
-
-    ## # A tibble: 55 x 5
-    ##     fips state                  cases region               population
-    ##    <int> <chr>                  <dbl> <chr>                     <dbl>
-    ##  1     1 Alabama               271116 Alabama                 4903185
-    ##  2     2 Alaska                 14704 Alaska                   731545
-    ##  3     4 Arizona               292111 Arizona                 7278717
-    ##  4     5 Arkansas              114726 Arkansas                3017804
-    ##  5     6 California           1885915 California             39512223
-    ##  6     8 Colorado              560913 Colorado                5758736
-    ##  7     9 Connecticut           965972 Connecticut             3565287
-    ##  8    10 Delaware              160596 Delaware                 973764
-    ##  9    11 District of Columbia  161289 District of Columbia     705749
-    ## 10    12 Florida              1296507 Florida                21477737
-    ## # … with 45 more rows
-
-``` r
+# states_cumulative %>% 
+#   left_join(population, by = "fips") %>% 
   # filter(!is.na(population)) %>% 
   # mutate(
   #   cases_per_capita = population / cases,
@@ -425,20 +378,20 @@ states %>%
   ungroup() # %>% 
 ```
 
-    ## # A tibble: 4,084 x 6
-    ##    date       state       fips cases deaths new_cases
-    ##    <date>     <chr>      <int> <dbl>  <dbl>     <dbl>
-    ##  1 2020-01-21 Washington    53     1      0        NA
-    ##  2 2020-01-22 Washington    53     1      0         0
-    ##  3 2020-01-23 Washington    53     1      0         0
-    ##  4 2020-01-24 Illinois      17     1      0        NA
-    ##  5 2020-01-24 Washington    53     1      0         0
-    ##  6 2020-01-25 California     6     1      0        NA
-    ##  7 2020-01-25 Illinois      17     1      0         0
-    ##  8 2020-01-25 Washington    53     1      0         0
-    ##  9 2020-01-26 Arizona        4     1      0        NA
-    ## 10 2020-01-26 California     6     2      0         1
-    ## # … with 4,074 more rows
+    ## # A tibble: 4,139 x 6
+    ##    date       state      fips  cases deaths new_cases
+    ##    <date>     <chr>      <chr> <dbl>  <dbl>     <dbl>
+    ##  1 2020-01-21 Washington 53        1      0        NA
+    ##  2 2020-01-22 Washington 53        1      0         0
+    ##  3 2020-01-23 Washington 53        1      0         0
+    ##  4 2020-01-24 Illinois   17        1      0        NA
+    ##  5 2020-01-24 Washington 53        1      0         0
+    ##  6 2020-01-25 California 06        1      0        NA
+    ##  7 2020-01-25 Illinois   17        1      0         0
+    ##  8 2020-01-25 Washington 53        1      0         0
+    ##  9 2020-01-26 Arizona    04        1      0        NA
+    ## 10 2020-01-26 California 06        2      0         1
+    ## # … with 4,129 more rows
 
 ``` r
   # drop_na(new_cases) %>% 
@@ -469,23 +422,23 @@ counties_cumulative %>%
 ```
 
     ## # A tibble: 15 x 4
-    ##    county                     state          fips   cases
-    ##    <fct>                      <chr>         <int>   <dbl>
-    ##  1 Bergen, New Jersey         New Jersey    34003  588060
-    ##  2 Cook, Illinois             Illinois      17031 1329345
-    ##  3 Essex, New Jersey          New Jersey    34013  493091
-    ##  4 Hudson, New Jersey         New Jersey    34017  518008
-    ##  5 Los Angeles, California    California     6037  829987
-    ##  6 Miami-Dade, Florida        Florida       12086  453063
-    ##  7 Middlesex, Massachusetts   Massachusetts 25017  481463
-    ##  8 Nassau, New York           New York      36059 1373748
-    ##  9 Philadelphia, Pennsylvania Pennsylvania  42101  501162
-    ## 10 Rockland, New York         New York      36087  446773
-    ## 11 Suffolk, Massachusetts     Massachusetts 25025  434166
-    ## 12 Suffolk, New York          New York      36103 1261594
-    ## 13 Union, New Jersey          New Jersey    34039  442661
-    ## 14 Wayne, Michigan            Michigan      26163  645806
-    ## 15 Westchester, New York      New York      36119 1156763
+    ##    county                     state         fips    cases
+    ##    <fct>                      <chr>         <chr>   <dbl>
+    ##  1 Bergen, New Jersey         New Jersey    34003  605306
+    ##  2 Cook, Illinois             Illinois      17031 1390557
+    ##  3 Essex, New Jersey          New Jersey    34013  509123
+    ##  4 Hudson, New Jersey         New Jersey    34017  535334
+    ##  5 Los Angeles, California    California    06037  867290
+    ##  6 Miami-Dade, Florida        Florida       12086  468428
+    ##  7 Middlesex, Massachusetts   Massachusetts 25017  500346
+    ##  8 Nassau, New York           New York      36059 1412781
+    ##  9 Philadelphia, Pennsylvania Pennsylvania  42101  520768
+    ## 10 Rockland, New York         New York      36087  459461
+    ## 11 Suffolk, Massachusetts     Massachusetts 25025  450512
+    ## 12 Suffolk, New York          New York      36103 1299536
+    ## 13 Union, New Jersey          New Jersey    34039  457230
+    ## 14 Wayne, Michigan            Michigan      26163  664822
+    ## 15 Westchester, New York      New York      36119 1188859
 
 ``` r
 # TODO: plot cases for top N counties

@@ -44,17 +44,7 @@ file_population <- "data/populations.csv"
 #   )
 counties <-
   url_counties %>% 
-  read_csv(
-    col_types =
-      cols(
-        date = col_date(format = ""),
-        county = col_character(),
-        state = col_character(),
-        fips = col_integer(),
-        cases = col_double(),
-        deaths = col_double()
-      )
-  )
+  read_csv()
 
 # col_types = 
 #   cols(
@@ -66,16 +56,7 @@ counties <-
 #   )
 states <-
   url_states %>% 
-  read_csv(
-    col_types = 
-      cols(
-        date = col_date(format = ""),
-        state = col_character(),
-        fips = col_integer(),
-        cases = col_double(),
-        deaths = col_double()
-      )
-  )
+  read_csv()
 
 # col_types =
 #   cols(
@@ -85,14 +66,7 @@ states <-
 #   )
 population <-
   file_population %>% 
-  read_csv(
-    col_types =
-      cols(
-        region = col_character(),
-        fips = col_integer(),
-        population = col_double()
-      )
-  )
+  read_csv()
 ```
 
 ## States
@@ -149,7 +123,6 @@ states %>%
 ```
 
 ## Counties
-
 
 ### Glimpse and summary
 
@@ -209,7 +182,6 @@ us_daily <-
 
 us_daily %>% 
   drop_na(new_cases) %>% 
-  filter(new_cases > 0) %>% # TODO: filter to just March through May
   ggplot(aes(date, new_cases)) +
   geom_col() 
 ```
@@ -233,8 +205,8 @@ states_cumulative %>%
 ### Which state has the most cases per capita?
 
 ```{r fig.asp=0.7}
-states_cumulative %>% 
-  left_join(population, by = "fips") # %>% 
+# states_cumulative %>% 
+#   left_join(population, by = "fips") %>% 
   # filter(!is.na(population)) %>% 
   # mutate(
   #   cases_per_capita = population / cases,
