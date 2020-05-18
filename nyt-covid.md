@@ -1,7 +1,7 @@
 NYT Covid cases
 ================
 Your name
-2020-05-17
+2020-05-18
 
   - [States](#states)
       - [Summary](#summary)
@@ -62,20 +62,20 @@ population <-
 summary(states)
 ```
 
-    ##       date               state               fips               cases       
-    ##  Min.   :2020-01-21   Length:4139        Length:4139        Min.   :     1  
-    ##  1st Qu.:2020-03-21   Class :character   Class :character   1st Qu.:    69  
-    ##  Median :2020-04-09   Mode  :character   Mode  :character   Median :  1146  
-    ##  Mean   :2020-04-07                                         Mean   : 10010  
-    ##  3rd Qu.:2020-04-28                                         3rd Qu.:  6644  
-    ##  Max.   :2020-05-16                                         Max.   :353136  
+    ##       date               state               fips               cases         
+    ##  Min.   :2020-01-21   Length:4194        Length:4194        Min.   :     1.0  
+    ##  1st Qu.:2020-03-21   Class :character   Class :character   1st Qu.:    73.2  
+    ##  Median :2020-04-09   Mode  :character   Mode  :character   Median :  1188.0  
+    ##  Mean   :2020-04-08                                         Mean   : 10235.0  
+    ##  3rd Qu.:2020-04-28                                         3rd Qu.:  6866.8  
+    ##  Max.   :2020-05-17                                         Max.   :355037.0  
     ##      deaths       
     ##  Min.   :    0.0  
     ##  1st Qu.:    1.0  
-    ##  Median :   27.0  
-    ##  Mean   :  541.6  
-    ##  3rd Qu.:  235.5  
-    ##  Max.   :27953.0
+    ##  Median :   28.5  
+    ##  Mean   :  555.8  
+    ##  3rd Qu.:  242.0  
+    ##  Max.   :28168.0
 
 ### Check for problems
 
@@ -89,7 +89,7 @@ Missing values, errors, etc.
 glimpse(counties)
 ```
 
-    ## Rows: 150,169
+    ## Rows: 153,101
     ## Columns: 6
     ## $ date   <date> 2020-01-21, 2020-01-22, 2020-01-23, 2020-01-24, 2020-01-24, 2…
     ## $ county <chr> "Snohomish", "Snohomish", "Snohomish", "Cook", "Snohomish", "O…
@@ -103,19 +103,19 @@ summary(counties)
 ```
 
     ##       date               county             state               fips          
-    ##  Min.   :2020-01-21   Length:150169      Length:150169      Length:150169     
-    ##  1st Qu.:2020-04-06   Class :character   Class :character   Class :character  
-    ##  Median :2020-04-20   Mode  :character   Mode  :character   Mode  :character  
+    ##  Min.   :2020-01-21   Length:153101      Length:153101      Length:153101     
+    ##  1st Qu.:2020-04-07   Class :character   Class :character   Class :character  
+    ##  Median :2020-04-21   Mode  :character   Mode  :character   Mode  :character  
     ##  Mean   :2020-04-19                                                           
     ##  3rd Qu.:2020-05-04                                                           
-    ##  Max.   :2020-05-16                                                           
+    ##  Max.   :2020-05-17                                                           
     ##      cases              deaths        
     ##  Min.   :     0.0   Min.   :    0.00  
     ##  1st Qu.:     3.0   1st Qu.:    0.00  
     ##  Median :    14.0   Median :    0.00  
-    ##  Mean   :   275.9   Mean   :   14.93  
-    ##  3rd Qu.:    63.0   3rd Qu.:    2.00  
-    ##  Max.   :196481.0   Max.   :20071.00
+    ##  Mean   :   280.4   Mean   :   15.23  
+    ##  3rd Qu.:    64.0   3rd Qu.:    2.00  
+    ##  Max.   :197486.0   Max.   :20214.00
 
 ### Check for problems
 
