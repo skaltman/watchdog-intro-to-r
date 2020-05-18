@@ -6,16 +6,14 @@ Your name
   - [States](#states)
       - [Summary](#summary)
       - [Check for problems](#check-for-problems)
-      - [Missing values](#missing-values)
   - [Counties](#counties)
       - [Glimpse and summary](#glimpse-and-summary)
       - [Check for problems](#check-for-problems-1)
-      - [Missing values](#missing-values-1)
+      - [Missing values](#missing-values)
   - [Visualizations](#visualizations)
       - [U.S.](#u.s.)
       - [States](#states-1)
       - [Counties](#counties-1)
-  - [Compare trends across states](#compare-trends-across-states)
 
 ``` r
 # Libraries
@@ -49,25 +47,6 @@ counties <-
   url_counties %>% 
   read_csv() 
 
-counties
-```
-
-    ## # A tibble: 150,169 x 6
-    ##    date       county      state      fips  cases deaths
-    ##    <date>     <chr>       <chr>      <chr> <dbl>  <dbl>
-    ##  1 2020-01-21 Snohomish   Washington 53061     1      0
-    ##  2 2020-01-22 Snohomish   Washington 53061     1      0
-    ##  3 2020-01-23 Snohomish   Washington 53061     1      0
-    ##  4 2020-01-24 Cook        Illinois   17031     1      0
-    ##  5 2020-01-24 Snohomish   Washington 53061     1      0
-    ##  6 2020-01-25 Orange      California 06059     1      0
-    ##  7 2020-01-25 Cook        Illinois   17031     1      0
-    ##  8 2020-01-25 Snohomish   Washington 53061     1      0
-    ##  9 2020-01-26 Maricopa    Arizona    04013     1      0
-    ## 10 2020-01-26 Los Angeles California 06037     1      0
-    ## # … with 150,159 more rows
-
-``` r
 states <-
   url_states %>% 
   read_csv(
@@ -118,7 +97,7 @@ summary(states)
 
 ### Check for problems
 
-### Missing values
+Missing values, errors, etc.
 
 ## Counties
 
@@ -158,51 +137,6 @@ summary(counties)
 
 ### Check for problems
 
-``` r
-n_distinct(counties$county)
-```
-
-    ## [1] 1727
-
-``` r
-n_distinct(counties$state)
-```
-
-    ## [1] 55
-
-``` r
-unique(counties$state)
-```
-
-    ##  [1] "Washington"               "Illinois"                
-    ##  [3] "California"               "Arizona"                 
-    ##  [5] "Massachusetts"            "Wisconsin"               
-    ##  [7] "Texas"                    "Nebraska"                
-    ##  [9] "Utah"                     "Oregon"                  
-    ## [11] "Florida"                  "New York"                
-    ## [13] "Rhode Island"             "Georgia"                 
-    ## [15] "New Hampshire"            "North Carolina"          
-    ## [17] "New Jersey"               "Colorado"                
-    ## [19] "Maryland"                 "Nevada"                  
-    ## [21] "Tennessee"                "Hawaii"                  
-    ## [23] "Indiana"                  "Kentucky"                
-    ## [25] "Minnesota"                "Oklahoma"                
-    ## [27] "Pennsylvania"             "South Carolina"          
-    ## [29] "District of Columbia"     "Kansas"                  
-    ## [31] "Missouri"                 "Vermont"                 
-    ## [33] "Virginia"                 "Connecticut"             
-    ## [35] "Iowa"                     "Louisiana"               
-    ## [37] "Ohio"                     "Michigan"                
-    ## [39] "South Dakota"             "Arkansas"                
-    ## [41] "Delaware"                 "Mississippi"             
-    ## [43] "New Mexico"               "North Dakota"            
-    ## [45] "Wyoming"                  "Alaska"                  
-    ## [47] "Maine"                    "Alabama"                 
-    ## [49] "Idaho"                    "Montana"                 
-    ## [51] "Puerto Rico"              "Virgin Islands"          
-    ## [53] "Guam"                     "West Virginia"           
-    ## [55] "Northern Mariana Islands"
-
 ### Missing values
 
 ## Visualizations
@@ -214,11 +148,7 @@ us <-
   states %>% 
   group_by(date) %>% 
   summarize(cases = sum(cases))
-```
 
-    ## `summarise()` ungrouping (override with `.groups` argument)
-
-``` r
 us_daily <-
   us %>% 
   mutate(new_cases = cases - lag(cases, order_by = date)) 
@@ -227,26 +157,22 @@ us_daily <-
 ### States
 
 ``` r
-states_cumulative <-
+states_latest <-
   states %>% 
-  group_by(fips, state) %>% 
-  summarize(cases = sum(cases, na.rm = TRUE)) %>% 
-  ungroup()
+  group_by(fips) %>% 
+  filter(date == max(date)) %>% 
+  ungroup() %>% 
+  left_join(population, by = "fips")
 ```
-
-    ## `summarise()` regrouping by 'fips' (override with `.groups` argument)
 
 ### Counties
 
 ``` r
-counties_cumulative <-
-  counties %>% 
-  drop_na(fips) %>% 
-  group_by(county, state, fips) %>% 
-  summarize(cases = sum(cases, na.rm = TRUE)) %>% 
-  ungroup()
+# counties_latest <-
+#   counties %>% 
+#   drop_na(fips) %>% 
+#   group_by(fips) %>% 
+#   filter(date == max(date)) %>% 
+#   ungroup() %>% 
+#   left_join(population, by = "fips")
 ```
-
-    ## `summarise()` regrouping by 'county', 'state' (override with `.groups` argument)
-
-## Compare trends across states

@@ -43,8 +43,6 @@ counties <-
   url_counties %>% 
   read_csv() 
 
-counties
-
 states <-
   url_states %>% 
   read_csv(
@@ -78,9 +76,13 @@ population <-
 summary(states)
 ```
 
-### Check for problems
+### Check for problems 
 
-### Missing values
+Missing values, errors, etc.
+
+```{r}
+
+```
 
 
 ## Counties
@@ -97,17 +99,6 @@ summary(counties)
 
 ### Check for problems
 
-```{r}
-n_distinct(counties$county)
-```
-
-```{r}
-n_distinct(counties$state)
-```
-
-```{r}
-unique(counties$state)
-```
 
 ### Missing values
 
@@ -130,25 +121,26 @@ us_daily <-
 ### States
 
 ```{r}
-states_cumulative <-
+states_latest <-
   states %>% 
-  group_by(fips, state) %>% 
-  summarize(cases = sum(cases, na.rm = TRUE)) %>% 
-  ungroup()
+  group_by(fips) %>% 
+  filter(date == max(date)) %>% 
+  ungroup() %>% 
+  left_join(population, by = "fips")
 ```
 
 ### Counties
 
 ```{r}
-counties_cumulative <-
-  counties %>% 
-  drop_na(fips) %>% 
-  group_by(county, state, fips) %>% 
-  summarize(cases = sum(cases, na.rm = TRUE)) %>% 
-  ungroup()
+# counties_latest <-
+#   counties %>% 
+#   drop_na(fips) %>% 
+#   group_by(fips) %>% 
+#   filter(date == max(date)) %>% 
+#   ungroup() %>% 
+#   left_join(population, by = "fips")
 ```
 
-## Compare trends across states
 
 
 
