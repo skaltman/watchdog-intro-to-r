@@ -31,33 +31,16 @@ url_counties <-
 url_states <- 
   "https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-states.csv"
 file_population <- "data/populations.csv"
+NYC_POPULATION <- 8398748
 #===============================================================================
 
-# col_types =
-#   cols(
-#     date = col_date(format = ""),
-#     county = col_character(),
-#     state = col_character(),
-#     fips = col_integer(),
-#     cases = col_double(),
-#     deaths = col_double()
-#   )
 counties <-
   url_counties %>% 
   read_csv() 
 
 states <-
   url_states %>% 
-  read_csv(
-    col_types =
-      cols(
-        date = col_date(format = ""),
-        state = col_character(),
-        fips = col_integer(),
-        cases = col_double(),
-        deaths = col_double()
-      )
-  )
+  read_csv()
 
 population <-
   file_population %>% 
@@ -65,7 +48,7 @@ population <-
     col_types =
       cols(
         region = col_character(),
-        fips = col_integer(),
+        fips = col_character(),
         population = col_double()
       )
   )
@@ -79,13 +62,13 @@ population <-
 summary(states)
 ```
 
-    ##       date               state                fips          cases       
-    ##  Min.   :2020-01-21   Length:4139        Min.   : 1.0   Min.   :     1  
-    ##  1st Qu.:2020-03-21   Class :character   1st Qu.:17.0   1st Qu.:    69  
-    ##  Median :2020-04-09   Mode  :character   Median :31.0   Median :  1146  
-    ##  Mean   :2020-04-07                      Mean   :31.5   Mean   : 10010  
-    ##  3rd Qu.:2020-04-28                      3rd Qu.:46.0   3rd Qu.:  6644  
-    ##  Max.   :2020-05-16                      Max.   :78.0   Max.   :353136  
+    ##       date               state               fips               cases       
+    ##  Min.   :2020-01-21   Length:4139        Length:4139        Min.   :     1  
+    ##  1st Qu.:2020-03-21   Class :character   Class :character   1st Qu.:    69  
+    ##  Median :2020-04-09   Mode  :character   Mode  :character   Median :  1146  
+    ##  Mean   :2020-04-07                                         Mean   : 10010  
+    ##  3rd Qu.:2020-04-28                                         3rd Qu.:  6644  
+    ##  Max.   :2020-05-16                                         Max.   :353136  
     ##      deaths       
     ##  Min.   :    0.0  
     ##  1st Qu.:    1.0  
@@ -151,6 +134,15 @@ us_daily <-
   mutate(new_cases = cases - lag(cases, order_by = date)) 
 ```
 
+``` r
+us_daily %>% 
+  drop_na(new_cases) %>% 
+  ggplot(aes(date, new_cases)) +
+  geom_col()
+```
+
+![](nyt-covid_files/figure-gfm/unnamed-chunk-7-1.png)<!-- -->
+
 ### States
 
 ``` r
@@ -159,17 +151,44 @@ states_latest <-
   group_by(fips) %>% 
   filter(date == max(date)) %>% 
   ungroup() %>% 
-  left_join(population, by = "fips")
+  left_join(population %>% select(-region), by = "fips")
 ```
+
+``` r
+# distribution
+states_latest %>% 
+  mutate(state = fct_reorder(state, cases)) %>% 
+  ggplot(aes(cases, state)) +
+  geom_point()
+```
+
+![](nyt-covid_files/figure-gfm/unnamed-chunk-9-1.png)<!-- -->
 
 ### Counties
 
 ``` r
-# counties_latest <-
-#   counties %>% 
-#   drop_na(fips) %>% 
-#   group_by(fips) %>% 
-#   filter(date == max(date)) %>% 
-#   ungroup() %>% 
-#   left_join(population, by = "fips")
+counties_latest <-
+  counties %>%
+  drop_na(fips) %>%
+  group_by(fips) %>%
+  filter(date == max(date)) %>%
+  ungroup() %>%
+  left_join(population %>% select(-region), by = "fips") #%>% 
+  # mutate(
+  #   population = if_else(county == "New York City", NYC_POPULATION, population),
+  #   cases_per_100 = (cases / population) * 100
+  # ) %>% 
+  # filter(!is.na(population))
+```
+
+``` r
+# counties_latest %>% 
+#   ggplot(aes(cases_per_100)) +
+#   geom_histogram(binwidth = 0.3)
+```
+
+``` r
+# counties_latest %>% 
+#   mutate(cases_per_100 = (cases / population) * 100) %>% 
+#   top_n(n = 30, wt = cases_per_100) 
 ```
