@@ -21,7 +21,6 @@ library(tidyverse)
     # Step 2: Click on the CSV file 
     # Step 3: Click "Raw" or "View raw"
     # Step 4: Copy the URL
-
   # URL for the county data
 url_counties <- 
   "https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-counties.csv"
@@ -31,9 +30,7 @@ url_states <-
 file_population <- "data/populations.csv"
 #===============================================================================
 
-# For reading in the data--we'll get to this in a bit!
-
-# col_types = 
+# col_types =
 #   cols(
 #     date = col_date(format = ""),
 #     county = col_character(),
@@ -44,83 +41,47 @@ file_population <- "data/populations.csv"
 #   )
 counties <-
   url_counties %>% 
-  read_csv()
+  read_csv() 
 
-# col_types = 
-#   cols(
-#     date = col_date(format = ""),
-#     state = col_character(),
-#     fips = col_integer(),
-#     cases = col_double(),
-#     deaths = col_double()
-#   )
+counties
+
 states <-
   url_states %>% 
-  read_csv()
+  read_csv(
+    col_types =
+      cols(
+        date = col_date(format = ""),
+        state = col_character(),
+        fips = col_integer(),
+        cases = col_double(),
+        deaths = col_double()
+      )
+  )
 
-# col_types =
-#   cols(
-#     region = col_character(),
-#     fips = col_integer(),
-#     population = col_double()
-#   )
 population <-
   file_population %>% 
-  read_csv()
+  read_csv(
+    col_types =
+      cols(
+        region = col_character(),
+        fips = col_integer(),
+        population = col_double()
+      )
+  )
 ```
 
 ## States
 
-### Glimpse and summary
+### Summary
 
 ```{r}
-
+summary(states)
 ```
 
-```{r}
-
-```
-
-### Check the states
-
-```{r}
-n_distinct(states$state)
-```
-
-```{r}
-unique(states$state)
-```
-
-```{r}
-states %>% 
-  filter(!state %in% state.name) %>% 
-  count(state, sort = TRUE)
-```
+### Check for problems
 
 ### Missing values
 
-```{r}
-states %>% 
-  summarize_all(~sum(is.na(.)))
-```
-
-`cases` and `deaths` are the _cumulative_ counts, so they should never go down (see the [documentation](https://github.com/nytimes/covid-19-data)). Is that true? 
-
-```{r}
-states %>% 
-  group_by(
-    # TODO: ADD NAME OF VARIABLE
-  ) %>% 
-  filter(lead(cases, order_by = date) < cases)
-```
-
-```{r}
-states %>% 
-  group_by(
-    # TODO: ADD NAME OF VARIABLE
-  ) %>% 
-  filter(lead(deaths, order_by = date) < deaths)
-```
 
 ## Counties
 
@@ -134,7 +95,7 @@ glimpse(counties)
 summary(counties)
 ```
 
-### Check counties and states
+### Check for problems
 
 ```{r}
 n_distinct(counties$county)
@@ -150,19 +111,10 @@ unique(counties$state)
 
 ### Missing values
 
-```{r}
-counties %>% 
-  summarize_all(~sum(is.na(.)))
-```
-
-```{r}
-# TODO: investigate further
-```
-
 
 ## Visualizations
 
-### U.S. cases over time
+### U.S. 
 
 ```{r}
 us <-
@@ -170,67 +122,22 @@ us <-
   group_by(date) %>% 
   summarize(cases = sum(cases))
 
-# us %>% 
-#   ggplot(aes(TODO: Add x and y variables)) +
-#   geom_line()
-```
-
-```{r}
 us_daily <-
   us %>% 
   mutate(new_cases = cases - lag(cases, order_by = date)) 
-
-us_daily %>% 
-  drop_na(new_cases) %>% 
-  ggplot(aes(date, new_cases)) +
-  geom_col() 
 ```
 
-### Which state has the most cases?
+### States
 
-```{r fig.asp=0.7}
+```{r}
 states_cumulative <-
   states %>% 
   group_by(fips, state) %>% 
   summarize(cases = sum(cases, na.rm = TRUE)) %>% 
   ungroup()
-
-# This plot is not very useful! Remove to comment to make it better
-states_cumulative %>% 
-  # mutate(state = fct_reorder(state, cases)) %>% 
-  ggplot(aes(cases, state)) +
-  geom_point()
 ```
 
-### Which state has the most cases per capita?
-
-```{r fig.asp=0.7}
-# states_cumulative %>% 
-#   left_join(population, by = "fips") %>% 
-  # filter(!is.na(population)) %>% 
-  # mutate(
-  #   cases_per_capita = population / cases,
-  #   state = fct_reorder(state, cases_per_capita)
-  # ) %>% 
-  # ggplot(aes(cases_per_capita, state)) +
-  # geom_point()
-```
-
-### State daily cases
-
-```{r}
-states %>% 
-  group_by(state) %>% 
-  mutate(new_cases = cases - lag(cases, order_by = date)) %>% 
-  ungroup() # %>% 
-  # drop_na(new_cases) %>% 
-  # filter(state == "TODO: CHOOSE A STATE") %>% 
-  # ggplot(aes(date, new_cases)) +
-  # geom_col()
-```
-
-
-## Counties
+### Counties
 
 ```{r}
 counties_cumulative <-
@@ -239,24 +146,9 @@ counties_cumulative <-
   group_by(county, state, fips) %>% 
   summarize(cases = sum(cases, na.rm = TRUE)) %>% 
   ungroup()
-
-counties_cumulative %>% 
-  top_n(n = 15, wt = cases) %>% 
-  mutate(
-    county = str_c(county, ", ", state) %>% fct_reorder(cases)
-  ) 
-# TODO: plot cases for top N counties
 ```
 
 ## Compare trends across states
 
-```{r}
-# TODO: Add or change the states
-# TODO: Try a log scale
-states %>% 
-  filter(state %in% c("California", "Georgia")) %>% 
-  ggplot(aes(date, cases, color = state)) +
-  geom_line() 
-```
 
 
