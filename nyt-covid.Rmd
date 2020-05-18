@@ -140,13 +140,13 @@ counties_latest <-
   #   population = if_else(county == "New York City", NYC_POPULATION, population),
   #   cases_per_100 = (cases / population) * 100
   # ) %>% 
-  # filter(!is.na(population))
+  # drop_na(population)
 ```
 
 ```{r}
 # counties_latest %>% 
 #   ggplot(aes(cases_per_100)) +
-#   geom_histogram(binwidth = 0.3)
+#   geom_histogram()
 ```
 
 
