@@ -99,10 +99,6 @@ summary(counties)
 
 ### Check for problems
 
-
-### Missing values
-
-
 ## Visualizations
 
 ### U.S. 

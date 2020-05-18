@@ -9,7 +9,6 @@ Your name
   - [Counties](#counties)
       - [Glimpse and summary](#glimpse-and-summary)
       - [Check for problems](#check-for-problems-1)
-      - [Missing values](#missing-values)
   - [Visualizations](#visualizations)
       - [U.S.](#u.s.)
       - [States](#states-1)
@@ -136,8 +135,6 @@ summary(counties)
     ##  Max.   :196481.0   Max.   :20071.00
 
 ### Check for problems
-
-### Missing values
 
 ## Visualizations
 
